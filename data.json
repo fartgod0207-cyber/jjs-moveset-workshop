@@ -7,5 +7,14 @@
     "author": "CreatorName",
     "stars": "1234",
     "image": "https://images.unsplash.com/photo-1578632767115-351597cf2477?q=80&w=600&auto=format&fit=crop"
+  },
+  {
+    "id": "MAP-CODE-001",
+    "category": "Maps",
+    "title": "Sample Map Title",
+    "description": "Overview of the map layout or arena type.",
+    "author": "BuilderName",
+    "stars": "890",
+    "image": "https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?q=80&w=600&auto=format&fit=crop"
   }
 ]
