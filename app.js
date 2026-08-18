@@ -10,6 +10,14 @@ document.addEventListener('DOMContentLoaded', async () => {
         console.error('Failed to load workshop data:', error);
     }
 
+    // Initialize Left-Click Dragging for Main Window
+    const mainWindow = document.getElementById('mainWindow');
+    const mainHeader = document.getElementById('mainHeader');
+    if (mainWindow && mainHeader) {
+        makeDraggable(mainWindow, mainHeader);
+    }
+
+    // Initialize Left-Click Dragging for Modal
     const modalWindow = document.getElementById('modalWindow');
     const modalHeader = document.getElementById('modalHeader');
     if (modalWindow && modalHeader) {
@@ -126,13 +134,21 @@ function handleCreateSubmit(event) {
     event.target.reset();
 }
 
+// Left Mouse Button Dragging Handler
 function makeDraggable(elmnt, dragHeader) {
     let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
     
     dragHeader.onmousedown = dragMouseDown;
 
     function dragMouseDown(e) {
-        e = e || window.event;
+        // Strict check: Only drag on Left Mouse Click (button === 0)
+        if (e.button !== 0) return;
+
+        // Ignore drag trigger if clicking on interactive elements inside header
+        if (['INPUT', 'BUTTON', 'A', 'SELECT', 'TEXTAREA'].includes(e.target.tagName)) {
+            return;
+        }
+
         e.preventDefault();
         pos3 = e.clientX;
         pos4 = e.clientY;
@@ -141,7 +157,6 @@ function makeDraggable(elmnt, dragHeader) {
     }
 
     function elementDrag(e) {
-        e = e || window.event;
         e.preventDefault();
         pos1 = pos3 - e.clientX;
         pos2 = pos4 - e.clientY;
