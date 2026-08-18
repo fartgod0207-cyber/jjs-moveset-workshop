@@ -1,5 +1,11 @@
 body {
-    background-color: #09090b;
+    margin: 0;
+    padding: 0;
+    background-image: url('cat.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
 }
 
 input::placeholder {
