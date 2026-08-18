@@ -10,23 +10,32 @@ document.addEventListener('DOMContentLoaded', async () => {
         console.error('Failed to load workshop data:', error);
     }
 
-    // Initialize dragging logic for the creation window
     makeDraggable(document.getElementById('modalWindow'), document.getElementById('modalHeader'));
 });
 
 function switchTab(tabName) {
     currentTab = tabName;
-    ['Movesets', 'Maps', 'Favourites', 'Uploads'].forEach(t => {
+    
+    ['Movesets', 'Maps', 'SkillBuilder', 'Favourites'].forEach(t => {
         let btn = document.getElementById('tab-' + t);
-        if (t === tabName) {
-            btn.classList.add('bg-[#c2c2c2]');
-            btn.classList.remove('hover:bg-[#b8b8b8]');
-        } else {
-            btn.classList.remove('bg-[#c2c2c2]');
-            btn.classList.add('hover:bg-[#b8b8b8]');
+        if (btn) {
+            if (t === tabName) {
+                btn.classList.add('bg-[#c2c2c2]');
+                btn.classList.remove('hover:bg-[#b8b8b8]');
+            } else {
+                btn.classList.remove('bg-[#c2c2c2]');
+                btn.classList.add('hover:bg-[#b8b8b8]');
+            }
         }
     });
-    renderCards();
+
+    let grid = document.getElementById('cardGrid');
+    if (tabName === 'SkillBuilder') {
+        renderSkillBuilderUI();
+    } else {
+        grid.className = "p-3 bg-[#b8b8b8] grid grid-cols-1 md:grid-cols-2 gap-3 min-h-[300px]";
+        renderCards();
+    }
 }
 
 function renderCards() {
@@ -35,7 +44,7 @@ function renderCards() {
     grid.innerHTML = '';
 
     let filtered = workshopData.filter(item => {
-        let matchesTab = (currentTab === 'Favourites' || currentTab === 'Uploads') ? true : item.category === currentTab;
+        let matchesTab = (currentTab === 'Favourites') ? true : item.category === currentTab;
         let matchesSearch = item.title.toLowerCase().includes(query) || 
                             item.description.toLowerCase().includes(query) || 
                             item.author.toLowerCase().includes(query);
@@ -52,7 +61,7 @@ function renderCards() {
     filtered.forEach(item => {
         let cardHTML = `
             <div class="relative bg-zinc-900 text-white border-2 border-[#555555] rounded overflow-hidden flex flex-col justify-between h-36 p-3 shadow-inner group">
-                <div class="absolute inset-0 bg-cover bg-center opacity-40" style="background-image: url('${item.image || 'https://via.placeholder.com/600x400/1e1e1e/ffffff?text=Workshop+Item'}');"></div>
+                <div class="absolute inset-0 bg-cover bg-center opacity-40" style="background-image: url('${item.image}');"></div>
                 
                 <div class="relative z-10 flex justify-between items-start">
                     <div>
@@ -78,8 +87,70 @@ function renderCards() {
     });
 }
 
+function renderSkillBuilderUI() {
+    let grid = document.getElementById('cardGrid');
+    grid.className = "p-3 bg-[#b8b8b8]";
+    
+    grid.innerHTML = `
+        <div class="bg-[#c2c2c2] border-2 border-[#555555] rounded p-3 text-zinc-900">
+            <div class="flex border-b-2 border-[#555555] bg-[#a0a0a0] text-xs font-bold mb-3">
+                <button class="px-4 py-1.5 bg-[#c2c2c2] border-r-2 border-[#555555]">Timeline</button>
+                <button class="px-4 py-1.5 hover:bg-[#b0b0b0] border-r-2 border-[#555555]">Conditions</button>
+                <button class="px-4 py-1.5 hover:bg-[#b0b0b0]">Properties</button>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="flex flex-col gap-2">
+                    <div class="bg-[#d4d4d4] border-2 border-[#555555] rounded p-2 flex flex-col gap-1.5">
+                        <button onclick="addTimelineBlock('Cancel')" class="bg-white hover:bg-zinc-100 border-2 border-[#555555] p-1 rounded text-center text-xs font-bold">Cancel</button>
+                        <button onclick="addTimelineBlock('Lapse Blue')" class="bg-[#93c5fd] hover:bg-[#7dd3fc] border-2 border-[#555555] p-1 rounded text-center text-xs font-bold">Lapse Blue</button>
+                        <button onclick="addTimelineBlock('Reversal Red')" class="bg-[#93c5fd] hover:bg-[#7dd3fc] border-2 border-[#555555] p-1 rounded text-center text-xs font-bold">Reversal Red</button>
+                        <button onclick="addTimelineBlock('Rapid punches')" class="bg-[#93c5fd] hover:bg-[#7dd3fc] border-2 border-[#555555] p-1 rounded text-center text-xs font-bold">Rapid punches</button>
+                        <button onclick="addTimelineBlock('Twofold Kick')" class="bg-[#93c5fd] hover:bg-[#7dd3fc] border-2 border-[#555555] p-1 rounded text-center text-xs font-bold">Twofold Kick</button>
+                    </div>
+
+                    <div class="bg-[#d4d4d4] border-2 border-[#555555] rounded p-2 flex justify-between items-center text-xs font-bold">
+                        <span>CANCEL LAST</span>
+                        <input type="checkbox" checked class="w-5 h-5 accent-red-600">
+                    </div>
+                    <div class="bg-[#d4d4d4] border-2 border-[#555555] rounded p-2 flex justify-between items-center text-xs font-bold">
+                        <span>ENABLE VARIANTS</span>
+                        <input type="checkbox" checked class="w-5 h-5 accent-emerald-500">
+                    </div>
+                </div>
+
+                <div class="flex flex-col justify-between bg-[#d4d4d4] border-2 border-[#555555] rounded p-2 min-h-[220px]">
+                    <div id="timelineStack" class="flex flex-col gap-1.5">
+                        <div class="bg-[#ffedd5] border-2 border-[#555555] p-1.5 rounded flex justify-between items-center text-xs font-bold text-orange-950">
+                            <span>⚔️ [Incantation] SPECIAL</span>
+                            <button onclick="this.parentElement.remove()" class="text-red-600 text-xs">✕</button>
+                        </div>
+                        <div class="bg-[#fecaca] border-2 border-cyan-400 p-1.5 rounded flex justify-between items-center text-xs font-bold text-red-950">
+                            <span>⚔️ [Strong Dismantle] SKILL</span>
+                            <button onclick="this.parentElement.remove()" class="text-red-600 text-xs">✕</button>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-end gap-1 mt-3 text-xs">
+                        <button onclick="document.getElementById('timelineStack').innerHTML=''" class="bg-red-500 text-white border-2 border-[#555555] px-2 py-0.5 rounded font-bold">- CLEAR</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+function addTimelineBlock(name) {
+    let stack = document.getElementById('timelineStack');
+    if (!stack) return;
+    let div = document.createElement('div');
+    div.className = "bg-[#bfdbfe] border-2 border-[#555555] p-1.5 rounded flex justify-between items-center text-xs font-bold text-blue-950";
+    div.innerHTML = `<span>⚔️ [${name}] SKILL</span><button onclick="this.parentElement.remove()" class="text-red-600 text-xs">✕</button>`;
+    stack.appendChild(div);
+}
+
 function filterCards() {
-    renderCards();
+    if (currentTab !== 'SkillBuilder') renderCards();
 }
 
 function copyCode(code) {
@@ -87,7 +158,6 @@ function copyCode(code) {
     alert('Copied Workshop ID: ' + code);
 }
 
-// Modal Toggle Functions
 function openCreateModal() {
     document.getElementById('createModal').classList.remove('hidden');
 }
@@ -96,10 +166,8 @@ function closeCreateModal() {
     document.getElementById('createModal').classList.add('hidden');
 }
 
-// Form Submission Handler
 function handleCreateSubmit(event) {
     event.preventDefault();
-
     const newItem = {
         id: document.getElementById('newId').value,
         category: document.getElementById('newCategory').value,
@@ -107,22 +175,17 @@ function handleCreateSubmit(event) {
         description: document.getElementById('newDescription').value,
         author: document.getElementById('newAuthor').value,
         stars: "0",
-        image: "https://via.placeholder.com/600x400/1e1e1e/ffffff?text=New+Creation"
+        image: "https://images.unsplash.com/photo-1578632767115-351597cf2477?q=80&w=600&auto=format&fit=crop"
     };
 
-    // Add item to local memory and re-render grid
     workshopData.unshift(newItem);
-    renderCards();
+    if (currentTab !== 'SkillBuilder') renderCards();
     closeCreateModal();
-
-    // Reset form fields
     event.target.reset();
 }
 
-// Draggable Window Handler
 function makeDraggable(elmnt, dragHeader) {
     let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
-    
     if (dragHeader) {
         dragHeader.onmousedown = dragMouseDown;
     } else {
