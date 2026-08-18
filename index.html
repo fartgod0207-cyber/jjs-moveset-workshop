@@ -6,10 +6,12 @@
     <title>Jujutsu Shenanigans - Workshop Hub</title>
     <!-- Finger Paint Font -->
     <link href="https://fonts.googleapis.com/css2?family=Finger+Paint&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Supabase JS Client Library -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <link rel="stylesheet" href="style.css">
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="min-h-screen flex items-center justify-center p-4 bg-cover bg-center bg-no-repeat bg-fixed select-none" style="background-image: url('cat.png');">
+<body class="min-h-screen flex items-center justify-center p-4 bg-cover bg-center bg-no-repeat bg-fixed select-none">
 
     <!-- Entire Window Container Made Draggable -->
     <div id="mainWindow" class="w-full max-w-4xl bg-[#c2c2c2] border-4 border-[#555555] shadow-2xl overflow-hidden text-zinc-900 font-['Finger_Paint'] absolute cursor-grab active:cursor-grabbing">
@@ -50,7 +52,7 @@
     <div id="createModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/50">
         <div id="modalWindow" class="w-full max-w-md bg-[#c2c2c2] border-4 border-[#555555] shadow-2xl overflow-hidden text-zinc-900 font-['Finger_Paint'] absolute cursor-grab active:cursor-grabbing">
             
-            <!-- Draggable Header -->
+            <!-- Modal Header -->
             <div class="bg-[#a0a0a0] border-b-2 border-[#555555] p-2 flex justify-between items-center select-none">
                 <span class="font-bold text-sm">CREATE WORKSHOP ITEM</span>
                 <button onclick="closeCreateModal()" class="bg-red-500 text-white px-2 py-0.5 text-xs border border-red-700 font-bold hover:bg-red-600">X</button>
