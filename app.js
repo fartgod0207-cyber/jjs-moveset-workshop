@@ -62,7 +62,7 @@ function renderCards() {
 
     filtered.forEach(item => {
         let cardHTML = `
-            <div class="relative bg-zinc-900 text-white border-2 border-[#555555] rounded overflow-hidden flex flex-col justify-between h-36 p-3 shadow-inner group">
+            <div class="relative bg-zinc-900 text-white border-2 border-[#555555] overflow-hidden flex flex-col justify-between h-36 p-3 shadow-inner group">
                 <div class="absolute inset-0 bg-cover bg-center opacity-40" style="background-image: url('${item.image}');"></div>
                 
                 <div class="relative z-10 flex justify-between items-start">
@@ -70,7 +70,7 @@ function renderCards() {
                         <h2 class="text-base font-black tracking-wide leading-tight drop-shadow">${item.title}</h2>
                         <p class="text-xs text-zinc-300 drop-shadow line-clamp-1">${item.description}</p>
                     </div>
-                    <div class="flex items-center gap-1 bg-black/40 px-1.5 py-0.5 rounded border border-white/20 text-xs">
+                    <div class="flex items-center gap-1 bg-black/40 px-1.5 py-0.5 border border-white/20 text-xs">
                         <span>⭐ ${item.stars || 0}</span>
                     </div>
                 </div>
@@ -78,9 +78,9 @@ function renderCards() {
                 <div class="relative z-10 flex justify-between items-end">
                     <span class="text-xs text-zinc-400">${item.author}</span>
                     <div class="flex items-center gap-1.5">
-                        <button class="bg-red-500/80 hover:bg-red-600 border border-red-400 p-1 rounded text-white text-xs" title="Report">⚠️</button>
-                        <button class="bg-zinc-700 hover:bg-zinc-600 border border-zinc-500 p-1 rounded text-white text-xs" title="Details">📦</button>
-                        <button onclick="copyCode('${item.id}')" class="bg-emerald-600 hover:bg-emerald-500 border border-emerald-400 p-1.5 rounded text-white text-xs font-bold" title="Copy Code">📥</button>
+                        <button class="bg-red-500/80 hover:bg-red-600 border border-red-400 p-1 text-white text-xs" title="Report">⚠️</button>
+                        <button class="bg-zinc-700 hover:bg-zinc-600 border border-zinc-500 p-1 text-white text-xs" title="Details">📦</button>
+                        <button onclick="copyCode('${item.id}')" class="bg-emerald-600 hover:bg-emerald-500 border border-emerald-400 p-1.5 text-white text-xs font-bold" title="Copy Code">📥</button>
                     </div>
                 </div>
             </div>
@@ -121,8 +121,6 @@ function handleCreateSubmit(event) {
     };
 
     workshopData.unshift(newItem);
-    
-    // Switch to the tab where the item was created and render
     switchTab(newItem.category);
     closeCreateModal();
     event.target.reset();
