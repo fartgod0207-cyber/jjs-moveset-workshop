@@ -3,169 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JJS Workshop — Community Presets & Maps</title>
-    <!-- Inter Font for clean, professional typography -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <title>Jujutsu Shenanigans - Workshop Hub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Architects+Daughter&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
     <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: { sans: ['Inter', 'sans-serif'] },
-                    colors: {
-                        darkBg: '#09090b',
-                        cardBg: '#121216',
-                        cardBorder: '#27272a'
-                    }
-                }
-            }
-        }
-    </script>
 </head>
-<body class="bg-darkBg text-zinc-100 antialiased min-h-screen selection:bg-rose-500 selection:text-white">
+<body class="bg-zinc-950 text-zinc-100 min-h-screen flex items-center justify-center p-4">
 
-    <!-- Top Navigation -->
-    <header class="border-b border-zinc-800/80 bg-darkBg/80 backdrop-blur-md sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-            <div class="flex items-center gap-3">
-                <div class="w-3 h-3 rounded-full bg-rose-500 animate-pulse"></div>
-                <span class="font-extrabold tracking-tight text-lg text-white">JJS<span class="text-rose-500">.</span>WORKSHOP</span>
-            </div>
-            <div class="flex items-center gap-4 text-xs font-medium text-zinc-400">
-                <span class="hidden sm:inline">No account needed • Instant copy</span>
-                <a href="https://github.com" target="_blank" class="bg-zinc-800 hover:bg-zinc-700 text-zinc-200 px-3 py-1.5 rounded-md transition border border-zinc-700/55">GitHub Source</a>
-            </div>
-        </div>
-    </header>
-
-    <!-- Main Content -->
-    <main class="max-w-7xl mx-auto px-6 py-10">
+    <!-- In-Game Main Window Container -->
+    <div class="w-full max-w-4xl bg-[#c2c2c2] border-4 border-[#555555] rounded-lg shadow-2xl overflow-hidden text-zinc-900 font-['Architects_Daughter']">
         
-        <!-- Hero Section -->
-        <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10 pb-8 border-b border-zinc-800/60">
-            <div>
-                <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight text-white mb-2">Community Presets</h1>
-                <p class="text-zinc-400 text-sm sm:text-base max-w-xl">Curated moveset codes, skill builder sequences, and map layouts for Jujutsu Shenanigans.</p>
-            </div>
-            <!-- Search / Filter Bar -->
-            <div class="w-full md:w-72">
-                <input type="text" id="searchInput" placeholder="Search presets or creators..." onkeyup="filterPresets()" 
-                    class="w-full bg-cardBg border border-cardBorder rounded-lg px-4 py-2.5 text-sm text-zinc-200 placeholder-zinc-500 focus:outline-none focus:border-rose-500 transition">
-            </div>
+        <!-- Top Tab Bar -->
+        <div class="flex border-b-2 border-[#555555] bg-[#b0b0b0] text-sm select-none">
+            <button onclick="switchTab('Movesets')" id="tab-Movesets" class="flex-1 py-2 text-center font-bold bg-[#c2c2c2] border-r-2 border-[#555555] transition">Movesets</button>
+            <button onclick="switchTab('Maps')" id="tab-Maps" class="flex-1 py-2 text-center font-bold hover:bg-[#b8b8b8] border-r-2 border-[#555555] transition">Maps</button>
+            <button onclick="switchTab('Favourites')" id="tab-Favourites" class="flex-1 py-2 text-center font-bold hover:bg-[#b8b8b8] border-r-2 border-[#555555] transition">Favourites</button>
+            <button onclick="switchTab('Uploads')" id="tab-Uploads" class="flex-1 py-2 text-center font-bold hover:bg-[#b8b8b8] transition">Uploads</button>
         </div>
 
-        <!-- Grid Container -->
-        <div id="presetGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-            <!-- Cards populated dynamically or statically via HTML below -->
+        <!-- Toolbar / Search & Pagination Section -->
+        <div class="p-2.5 bg-[#d4d4d4] border-b-2 border-[#555555] flex flex-wrap items-center justify-between gap-2">
+            <div class="flex-1 min-w-[200px]">
+                <input type="text" id="searchInput" placeholder="Search..." onkeyup="filterCards()" 
+                    class="w-full bg-white border-2 border-[#555555] px-3 py-1 text-sm rounded outline-none placeholder-zinc-500 text-zinc-800">
+            </div>
             
-            <div class="preset-card bg-cardBg border border-cardBorder rounded-xl p-5 flex flex-col justify-between hover:border-zinc-700 transition duration-200 group" data-search="infinite void rush gojo custom">
-                <div>
-                    <div class="flex items-center justify-between mb-3">
-                        <span class="text-[11px] font-semibold tracking-wide uppercase bg-rose-500/10 text-rose-400 px-2.5 py-1 rounded-md border border-rose-500/20">Moveset</span>
-                        <span class="text-xs text-zinc-500 font-medium">Base: Gojo</span>
-                    </div>
-                    <h3 class="font-bold text-base text-zinc-100 group-hover:text-rose-400 transition">Custom Infinite Void Rush</h3>
-                    <p class="text-xs text-zinc-400 mt-1.5 mb-4 leading-relaxed">High-pressure combo extension utilizing precise timeline frame manipulation.</p>
-                </div>
-                <div>
-                    <div class="bg-zinc-950 border border-zinc-900 rounded-lg p-2.5 flex items-center justify-between mb-3">
-                        <code class="text-xs text-zinc-300 font-mono tracking-wider">JJS-9834-5120</code>
-                        <button onclick="copyCode('JJS-9834-5120', this)" class="text-xs font-medium text-rose-400 hover:text-rose-300 bg-rose-500/10 hover:bg-rose-500/20 px-2.5 py-1 rounded transition">Copy</button>
-                    </div>
-                    <div class="flex items-center justify-between text-[11px] text-zinc-500">
-                        <span>By <strong class="text-zinc-400 font-medium">Vortex</strong></span>
-                        <span>2 days ago</span>
-                    </div>
-                </div>
+            <div class="flex items-center gap-1 text-xs font-bold">
+                <span id="resultCount" class="px-2 text-zinc-700">0 results</span>
+                <button class="bg-[#c2c2c2] border-2 border-[#555555] px-2.5 py-1 rounded hover:bg-[#b0b0b0]">&lt;</button>
+                <span class="bg-white border-2 border-[#555555] px-2.5 py-1 rounded">1/1</span>
+                <button class="bg-[#c2c2c2] border-2 border-[#555555] px-2.5 py-1 rounded hover:bg-[#b0b0b0]">&gt;</button>
+                <button class="bg-[#c2c2c2] border-2 border-[#555555] px-2.5 py-1 rounded hover:bg-[#b0b0b0]">TOP</button>
             </div>
-
-            <div class="preset-card bg-cardBg border border-cardBorder rounded-xl p-5 flex flex-col justify-between hover:border-zinc-700 transition duration-200 group" data-search="sukuna shrine realm yuji">
-                <div>
-                    <div class="flex items-center justify-between mb-3">
-                        <span class="text-[11px] font-semibold tracking-wide uppercase bg-amber-500/10 text-amber-400 px-2.5 py-1 rounded-md border border-amber-500/20">Skill Builder</span>
-                        <span class="text-xs text-zinc-500 font-medium">Base: Sukuna</span>
-                    </div>
-                    <h3 class="font-bold text-base text-zinc-100 group-hover:text-amber-400 transition">Malevolent Kitchen Loop</h3>
-                    <p class="text-xs text-zinc-400 mt-1.5 mb-4 leading-relaxed">Seamless custom startup frames for infinite air juggles.</p>
-                </div>
-                <div>
-                    <div class="bg-zinc-950 border border-zinc-900 rounded-lg p-2.5 flex items-center justify-between mb-3">
-                        <code class="text-xs text-zinc-300 font-mono tracking-wider">JJS-4412-9011</code>
-                        <button onclick="copyCode('JJS-4412-9011', this)" class="text-xs font-medium text-amber-400 hover:text-amber-300 bg-amber-500/10 hover:bg-amber-500/20 px-2.5 py-1 rounded transition">Copy</button>
-                    </div>
-                    <div class="flex items-center justify-between text-[11px] text-zinc-500">
-                        <span>By <strong class="text-zinc-400 font-medium">KaisenDev</strong></span>
-                        <span>5 days ago</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="preset-card bg-cardBg border border-cardBorder rounded-xl p-5 flex flex-col justify-between hover:border-zinc-700 transition duration-200 group" data-search="map arena shibuya destruction">
-                <div>
-                    <div class="flex items-center justify-between mb-3">
-                        <span class="text-[11px] font-semibold tracking-wide uppercase bg-blue-500/10 text-blue-400 px-2.5 py-1 rounded-md border border-blue-500/20">Map Layout</span>
-                        <span class="text-xs text-zinc-500 font-medium">Build Mode</span>
-                    </div>
-                    <h3 class="font-bold text-base text-zinc-100 group-hover:text-blue-400 transition">Shibuya Station Ruins</h3>
-                    <p class="text-xs text-zinc-400 mt-1.5 mb-4 leading-relaxed">Balanced multi-tier arena optimized for 1v1 tournaments and clean camera angles.</p>
-                </div>
-                <div>
-                    <div class="bg-zinc-950 border border-zinc-900 rounded-lg p-2.5 flex items-center justify-between mb-3">
-                        <code class="text-xs text-zinc-300 font-mono tracking-wider">MAP-8821-3310</code>
-                        <button onclick="copyCode('MAP-8821-3310', this)" class="text-xs font-medium text-blue-400 hover:text-blue-300 bg-blue-500/10 hover:bg-blue-500/20 px-2.5 py-1 rounded transition">Copy</button>
-                    </div>
-                    <div class="flex items-center justify-between text-[11px] text-zinc-500">
-                        <span>By <strong class="text-zinc-400 font-medium">BuilderX</strong></span>
-                        <span>1 week ago</span>
-                    </div>
-                </div>
-            </div>
-
         </div>
 
-        <!-- Empty Search State (Hidden by default) -->
-        <div id="noResults" class="hidden text-center py-16">
-            <p class="text-zinc-500 text-sm">No workshop items found matching your search.</p>
+        <!-- Grid Container for Cards (Populated via app.js) -->
+        <div class="p-3 bg-[#b8b8b8] grid grid-cols-1 md:grid-cols-2 gap-3 min-h-[300px]" id="cardGrid">
+            <!-- Dynamic Cards Go Here -->
         </div>
 
-    </main>
+        <!-- Bottom Window Footer Bar -->
+        <div class="bg-[#b0b0b0] border-t-2 border-[#555555] px-3 py-1.5 text-xs text-zinc-700 flex justify-between items-center">
+            <span>Jujutsu Shenanigans Workshop Web Port</span>
+            <span>Static Host Edition</span>
+        </div>
+    </div>
 
-    <!-- JavaScript for Functionality -->
-    <script>
-        function copyCode(code, btn) {
-            navigator.clipboard.writeText(code);
-            const originalText = btn.innerText;
-            btn.innerText = 'Copied!';
-            btn.classList.add('bg-emerald-500/20', 'text-emerald-400');
-            
-            setTimeout(() => {
-                btn.innerText = originalText;
-                btn.classList.remove('bg-emerald-500/20', 'text-emerald-400');
-            }, 1500);
-        }
-
-        function filterPresets() {
-            let query = document.getElementById('searchInput').value.toLowerCase();
-            let cards = document.querySelectorAll('.preset-card');
-            let matchCount = 0;
-
-            cards.forEach(card => {
-                let searchData = card.getAttribute('data-search') + ' ' + card.innerText.toLowerCase();
-                if (searchData.includes(query)) {
-                    card.style.display = 'flex';
-                    matchCount++;
-                } else {
-                    card.style.display = 'none';
-                }
-            });
-
-            const noResults = document.getElementById('noResults');
-            if (matchCount === 0) {
-                noResults.classList.remove('hidden');
-            } else {
-                noResults.classList.add('hidden');
-            }
-        }
-    </script>
+    <!-- Separate JavaScript File -->
+    <script src="app.js"></script>
 </body>
 </html>
