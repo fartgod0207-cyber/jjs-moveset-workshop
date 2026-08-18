@@ -10,13 +10,18 @@ document.addEventListener('DOMContentLoaded', async () => {
         console.error('Failed to load workshop data:', error);
     }
 
-    makeDraggable(document.getElementById('modalWindow'), document.getElementById('modalHeader'));
+    const modalWindow = document.getElementById('modalWindow');
+    const modalHeader = document.getElementById('modalHeader');
+    if (modalWindow && modalHeader) {
+        makeDraggable(modalWindow, modalHeader);
+    }
 });
 
 function switchTab(tabName) {
     currentTab = tabName;
     
-    ['Movesets', 'Maps', 'SkillBuilder', 'Favourites'].forEach(t => {
+    const tabs = ['Movesets', 'Maps', 'SkillBuilder', 'Favourites'];
+    tabs.forEach(t => {
         let btn = document.getElementById('tab-' + t);
         if (btn) {
             if (t === tabName) {
@@ -30,6 +35,8 @@ function switchTab(tabName) {
     });
 
     let grid = document.getElementById('cardGrid');
+    if (!grid) return;
+
     if (tabName === 'SkillBuilder') {
         renderSkillBuilderUI();
     } else {
@@ -40,18 +47,22 @@ function switchTab(tabName) {
 
 function renderCards() {
     let grid = document.getElementById('cardGrid');
-    let query = document.getElementById('searchInput').value.toLowerCase();
+    if (!grid) return;
+
+    let searchInput = document.getElementById('searchInput');
+    let query = searchInput ? searchInput.value.toLowerCase() : '';
     grid.innerHTML = '';
 
     let filtered = workshopData.filter(item => {
         let matchesTab = (currentTab === 'Favourites') ? true : item.category === currentTab;
-        let matchesSearch = item.title.toLowerCase().includes(query) || 
-                            item.description.toLowerCase().includes(query) || 
-                            item.author.toLowerCase().includes(query);
+        let matchesSearch = (item.title && item.title.toLowerCase().includes(query)) || 
+                            (item.description && item.description.toLowerCase().includes(query)) || 
+                            (item.author && item.author.toLowerCase().includes(query));
         return matchesTab && matchesSearch;
     });
 
-    document.getElementById('resultCount').innerText = filtered.length + ' results';
+    let countElem = document.getElementById('resultCount');
+    if (countElem) countElem.innerText = filtered.length + ' results';
 
     if (filtered.length === 0) {
         grid.innerHTML = `<div class="col-span-2 text-center py-10 text-zinc-700 font-bold">No results found</div>`;
@@ -89,6 +100,8 @@ function renderCards() {
 
 function renderSkillBuilderUI() {
     let grid = document.getElementById('cardGrid');
+    if (!grid) return;
+
     grid.className = "p-3 bg-[#b8b8b8]";
     
     grid.innerHTML = `
@@ -123,16 +136,16 @@ function renderSkillBuilderUI() {
                     <div id="timelineStack" class="flex flex-col gap-1.5">
                         <div class="bg-[#ffedd5] border-2 border-[#555555] p-1.5 rounded flex justify-between items-center text-xs font-bold text-orange-950">
                             <span>⚔️ [Incantation] SPECIAL</span>
-                            <button onclick="this.parentElement.remove()" class="text-red-600 text-xs">✕</button>
+                            <button onclick="this.parentElement.remove()" class="text-red-600 text-xs font-black">✕</button>
                         </div>
                         <div class="bg-[#fecaca] border-2 border-cyan-400 p-1.5 rounded flex justify-between items-center text-xs font-bold text-red-950">
                             <span>⚔️ [Strong Dismantle] SKILL</span>
-                            <button onclick="this.parentElement.remove()" class="text-red-600 text-xs">✕</button>
+                            <button onclick="this.parentElement.remove()" class="text-red-600 text-xs font-black">✕</button>
                         </div>
                     </div>
 
                     <div class="flex justify-end gap-1 mt-3 text-xs">
-                        <button onclick="document.getElementById('timelineStack').innerHTML=''" class="bg-red-500 text-white border-2 border-[#555555] px-2 py-0.5 rounded font-bold">- CLEAR</button>
+                        <button onclick="document.getElementById('timelineStack').innerHTML=''" class="bg-red-500 text-white border-2 border-[#555555] px-2 py-0.5 rounded font-bold hover:bg-red-600">- CLEAR</button>
                     </div>
                 </div>
             </div>
@@ -145,7 +158,7 @@ function addTimelineBlock(name) {
     if (!stack) return;
     let div = document.createElement('div');
     div.className = "bg-[#bfdbfe] border-2 border-[#555555] p-1.5 rounded flex justify-between items-center text-xs font-bold text-blue-950";
-    div.innerHTML = `<span>⚔️ [${name}] SKILL</span><button onclick="this.parentElement.remove()" class="text-red-600 text-xs">✕</button>`;
+    div.innerHTML = `<span>⚔️ [${name}] SKILL</span><button onclick="this.parentElement.remove()" class="text-red-600 text-xs font-black">✕</button>`;
     stack.appendChild(div);
 }
 
@@ -159,11 +172,13 @@ function copyCode(code) {
 }
 
 function openCreateModal() {
-    document.getElementById('createModal').classList.remove('hidden');
+    let modal = document.getElementById('createModal');
+    if (modal) modal.classList.remove('hidden');
 }
 
 function closeCreateModal() {
-    document.getElementById('createModal').classList.add('hidden');
+    let modal = document.getElementById('createModal');
+    if (modal) modal.classList.add('hidden');
 }
 
 function handleCreateSubmit(event) {
@@ -186,11 +201,8 @@ function handleCreateSubmit(event) {
 
 function makeDraggable(elmnt, dragHeader) {
     let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
-    if (dragHeader) {
-        dragHeader.onmousedown = dragMouseDown;
-    } else {
-        elmnt.onmousedown = dragMouseDown;
-    }
+    
+    dragHeader.onmousedown = dragMouseDown;
 
     function dragMouseDown(e) {
         e = e || window.event;
