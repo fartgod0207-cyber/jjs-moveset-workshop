@@ -4,36 +4,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jujutsu Shenanigans - Workshop Hub</title>
+    <!-- Finger Paint Font -->
     <link href="https://fonts.googleapis.com/css2?family=Finger+Paint&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-zinc-950 text-zinc-100 min-h-screen flex items-center justify-center p-4">
 
-    <!-- Top Tab Bar -->
+    <!-- Main In-Game Window Container -->
+    <div class="w-full max-w-4xl bg-[#c2c2c2] border-4 border-[#555555] rounded-lg shadow-2xl overflow-hidden text-zinc-900 font-['Finger_Paint']">
+        
+        <!-- Top Navigation Bar -->
         <div class="flex border-b-2 border-[#555555] bg-[#b0b0b0] text-sm select-none">
             <button onclick="switchTab('Movesets')" id="tab-Movesets" class="flex-1 py-2 text-center font-bold bg-[#c2c2c2] border-r-2 border-[#555555] transition">Movesets</button>
             <button onclick="switchTab('Maps')" id="tab-Maps" class="flex-1 py-2 text-center font-bold hover:bg-[#b8b8b8] border-r-2 border-[#555555] transition">Maps</button>
             <button onclick="switchTab('SkillBuilder')" id="tab-SkillBuilder" class="flex-1 py-2 text-center font-bold hover:bg-[#b8b8b8] border-r-2 border-[#555555] transition">Skill Builder</button>
-            <button onclick="switchTab('Favourites')" id="tab-Favourites" class="flex-1 py-2 text-center font-bold hover:bg-[#b8b8b8] border-r-2 border-[#555555] transition">Favourites</button>
-        </div>
-    
-    <!-- In-Game Main Window Container -->
-    <div class="w-full max-w-4xl bg-[#c2c2c2] border-4 border-[#555555] rounded-lg shadow-2xl overflow-hidden text-zinc-900 font-['Finger_Paint']">
-        
-        <!-- Top Tab Bar -->
-        <div class="flex border-b-2 border-[#555555] bg-[#b0b0b0] text-sm select-none">
-            <button onclick="switchTab('Movesets')" id="tab-Movesets" class="flex-1 py-2 text-center font-bold bg-[#c2c2c2] border-r-2 border-[#555555] transition">Movesets</button>
-            <button onclick="switchTab('Maps')" id="tab-Maps" class="flex-1 py-2 text-center font-bold hover:bg-[#b8b8b8] border-r-2 border-[#555555] transition">Maps</button>
-            <button onclick="switchTab('Favourites')" id="tab-Favourites" class="flex-1 py-2 text-center font-bold hover:bg-[#b8b8b8] border-r-2 border-[#555555] transition">Favourites</button>
-            <button onclick="switchTab('Uploads')" id="tab-Uploads" class="flex-1 py-2 text-center font-bold hover:bg-[#b8b8b8] transition">Uploads</button>
+            <button onclick="switchTab('Favourites')" id="tab-Favourites" class="flex-1 py-2 text-center font-bold hover:bg-[#b8b8b8] transition">Favourites</button>
         </div>
 
         <!-- Toolbar Section -->
         <div class="p-2.5 bg-[#d4d4d4] border-b-2 border-[#555555] flex flex-wrap items-center justify-between gap-2">
             <div class="flex-1 min-w-[200px]">
                 <input type="text" id="searchInput" placeholder="Search..." onkeyup="filterCards()" 
-                    class="w-full bg-white border-2 border-[#555555] px-3 py-1 text-sm rounded outline-none placeholder-zinc-500 text-zinc-800">
+                    class="w-full bg-white border-2 border-[#555555] px-3 py-1 text-sm rounded outline-none text-zinc-800">
             </div>
             
             <div class="flex items-center gap-1 text-xs font-bold">
@@ -42,9 +35,9 @@
             </div>
         </div>
 
-        <!-- Grid Container for Cards -->
+        <!-- Workspace Container (Cards / Skill Builder render here) -->
         <div class="p-3 bg-[#b8b8b8] grid grid-cols-1 md:grid-cols-2 gap-3 min-h-[300px]" id="cardGrid">
-            <!-- Dynamic Cards Go Here -->
+            <!-- Rendered dynamically by app.js -->
         </div>
 
         <!-- Footer Bar -->
@@ -54,11 +47,11 @@
         </div>
     </div>
 
-    <!-- Draggable Creation Modal Window -->
+    <!-- Draggable Creation Modal -->
     <div id="createModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/50">
         <div id="modalWindow" class="w-full max-w-md bg-[#c2c2c2] border-4 border-[#555555] rounded-lg shadow-2xl overflow-hidden text-zinc-900 font-['Finger_Paint'] absolute">
             
-            <!-- Draggable Title Header Bar -->
+            <!-- Draggable Header -->
             <div id="modalHeader" class="bg-[#a0a0a0] border-b-2 border-[#555555] p-2 flex justify-between items-center cursor-move select-none">
                 <span class="font-bold text-sm">CREATE WORKSHOP ITEM</span>
                 <button onclick="closeCreateModal()" class="bg-red-500 text-white px-2 py-0.5 rounded text-xs border border-red-700 font-bold hover:bg-red-600">X</button>
@@ -91,7 +84,7 @@
 
                 <div>
                     <label class="block mb-1 font-bold">Description</label>
-                    <textarea id="newDescription" rows="2" placeholder="Brief details about your setup..." class="w-full bg-white border-2 border-[#555555] p-1.5 rounded outline-none"></textarea>
+                    <textarea id="newDescription" rows="2" placeholder="Brief details..." class="w-full bg-white border-2 border-[#555555] p-1.5 rounded outline-none"></textarea>
                 </div>
 
                 <div class="flex gap-2 justify-end mt-2">
