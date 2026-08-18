@@ -1,27 +1,39 @@
+// Replace with your actual Supabase Project URL and Anon Public Key
+const SUPABASE_URL = 'https://YOUR_PROJECT_ID.supabase.co';
+const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY';
+
+const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
 let workshopData = [];
 let currentTab = 'Movesets';
 
 document.addEventListener('DOMContentLoaded', async () => {
+    // Fetch items directly from Supabase DB on startup
+    await fetchWorkshopData();
+
+    // Make main window and modal draggable
+    const mainWindow = document.getElementById('mainWindow');
+    if (mainWindow) makeDraggable(mainWindow, mainWindow);
+
+    const modalWindow = document.getElementById('modalWindow');
+    if (modalWindow) makeDraggable(modalWindow, modalWindow);
+});
+
+async function fetchWorkshopData() {
     try {
-        let response = await fetch('data.json');
-        workshopData = await response.json();
+        let { data, error } = await supabaseClient
+            .from('workshop_items')
+            .select('*')
+            .order('created_at', { ascending: false });
+
+        if (error) throw error;
+
+        workshopData = data || [];
         renderCards();
     } catch (error) {
-        console.error('Failed to load workshop data:', error);
+        console.error('Error fetching data from Supabase:', error.message);
     }
-
-    // Make the ENTIRE main window draggable by passing mainWindow as both targets
-    const mainWindow = document.getElementById('mainWindow');
-    if (mainWindow) {
-        makeDraggable(mainWindow, mainWindow);
-    }
-
-    // Make the ENTIRE modal window draggable
-    const modalWindow = document.getElementById('modalWindow');
-    if (modalWindow) {
-        makeDraggable(modalWindow, modalWindow);
-    }
-});
+}
 
 function switchTab(tabName) {
     currentTab = tabName;
@@ -69,7 +81,7 @@ function renderCards() {
     filtered.forEach(item => {
         let cardHTML = `
             <div class="relative bg-zinc-900 text-white border-2 border-[#555555] overflow-hidden flex flex-col justify-between h-36 p-3 shadow-inner group">
-                <div class="absolute inset-0 bg-cover bg-center opacity-40" style="background-image: url('${item.image}');"></div>
+                <div class="absolute inset-0 bg-cover bg-center opacity-40" style="background-image: url('${item.image || 'cat.png'}');"></div>
                 
                 <div class="relative z-10 flex justify-between items-start">
                     <div>
@@ -114,8 +126,9 @@ function closeCreateModal() {
     if (modal) modal.classList.add('hidden');
 }
 
-function handleCreateSubmit(event) {
+async function handleCreateSubmit(event) {
     event.preventDefault();
+
     const newItem = {
         id: document.getElementById('newId').value,
         category: document.getElementById('newCategory').value,
@@ -126,23 +139,31 @@ function handleCreateSubmit(event) {
         image: "cat.png"
     };
 
-    workshopData.unshift(newItem);
-    switchTab(newItem.category);
-    closeCreateModal();
-    event.target.reset();
+    try {
+        // Insert item into Supabase Table
+        let { error } = await supabaseClient
+            .from('workshop_items')
+            .insert([newItem]);
+
+        if (error) throw error;
+
+        // Refresh UI list from database
+        await fetchWorkshopData();
+        switchTab(newItem.category);
+        closeCreateModal();
+        event.target.reset();
+    } catch (error) {
+        console.error('Error inserting item to Supabase:', error.message);
+        alert('Failed to save item: ' + error.message);
+    }
 }
 
-// Allows dragging from ANYWHERE on the window (except interactive elements)
 function makeDraggable(elmnt, dragArea) {
     let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
-    
     dragArea.onmousedown = dragMouseDown;
 
     function dragMouseDown(e) {
-        // Only trigger on Left Mouse Click (button === 0)
         if (e.button !== 0) return;
-
-        // Prevent dragging when clicking buttons, inputs, dropdowns, or textareas
         if (['INPUT', 'BUTTON', 'A', 'SELECT', 'TEXTAREA'].includes(e.target.tagName) || e.target.closest('button')) {
             return;
         }
