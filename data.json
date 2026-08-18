@@ -6,33 +6,6 @@
     "description": "Short description of the custom moveset goes here.",
     "author": "CreatorName",
     "stars": "1234",
-    "image": "https://via.placeholder.com/600x400/1e1e1e/ffffff?text=Moveset+Thumbnail"
-  },
-  {
-    "id": "PRESET-CODE-002",
-    "category": "Movesets",
-    "title": "Another Custom Moveset",
-    "description": "Brief explanation of combo sequence or character tech.",
-    "author": "CreatorName",
-    "stars": "567",
-    "image": "https://via.placeholder.com/600x400/1e1e1e/ffffff?text=Moveset+Thumbnail"
-  },
-  {
-    "id": "MAP-CODE-001",
-    "category": "Maps",
-    "title": "Sample Map Title",
-    "description": "Overview of the map layout, build mode features, or arena type.",
-    "author": "BuilderName",
-    "stars": "890",
-    "image": "https://via.placeholder.com/600x400/1e1e1e/ffffff?text=Map+Thumbnail"
-  },
-  {
-    "id": "MAP-CODE-002",
-    "category": "Maps",
-    "title": "Custom Arena Map",
-    "description": "Details about map layout and player capacity.",
-    "author": "BuilderName",
-    "stars": "432",
-    "image": "https://via.placeholder.com/600x400/1e1e1e/ffffff?text=Map+Thumbnail"
+    "image": "https://images.unsplash.com/photo-1578632767115-351597cf2477?q=80&w=600&auto=format&fit=crop"
   }
 ]
