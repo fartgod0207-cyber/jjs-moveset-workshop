@@ -117,7 +117,7 @@ function handleCreateSubmit(event) {
         description: document.getElementById('newDescription').value,
         author: document.getElementById('newAuthor').value,
         stars: "0",
-        image: "https://images.unsplash.com/photo-1578632767115-351597cf2477?q=80&w=600&auto=format&fit=crop"
+        image: "cat.png"
     };
 
     workshopData.unshift(newItem);
