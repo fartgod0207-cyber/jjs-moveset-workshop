@@ -1,7 +1,6 @@
 let workshopData = [];
 let currentTab = 'Movesets';
 
-// Fetch data from data.json when the page loads
 document.addEventListener('DOMContentLoaded', async () => {
     try {
         let response = await fetch('data.json');
@@ -10,11 +9,13 @@ document.addEventListener('DOMContentLoaded', async () => {
     } catch (error) {
         console.error('Failed to load workshop data:', error);
     }
+
+    // Initialize dragging logic for the creation window
+    makeDraggable(document.getElementById('modalWindow'), document.getElementById('modalHeader'));
 });
 
 function switchTab(tabName) {
     currentTab = tabName;
-    
     ['Movesets', 'Maps', 'Favourites', 'Uploads'].forEach(t => {
         let btn = document.getElementById('tab-' + t);
         if (t === tabName) {
@@ -25,7 +26,6 @@ function switchTab(tabName) {
             btn.classList.add('hover:bg-[#b8b8b8]');
         }
     });
-
     renderCards();
 }
 
@@ -52,7 +52,7 @@ function renderCards() {
     filtered.forEach(item => {
         let cardHTML = `
             <div class="relative bg-zinc-900 text-white border-2 border-[#555555] rounded overflow-hidden flex flex-col justify-between h-36 p-3 shadow-inner group">
-                <div class="absolute inset-0 bg-cover bg-center opacity-40" style="background-image: url('${item.image}');"></div>
+                <div class="absolute inset-0 bg-cover bg-center opacity-40" style="background-image: url('${item.image || 'https://via.placeholder.com/600x400/1e1e1e/ffffff?text=Workshop+Item'}');"></div>
                 
                 <div class="relative z-10 flex justify-between items-start">
                     <div>
@@ -60,7 +60,7 @@ function renderCards() {
                         <p class="text-xs text-zinc-300 drop-shadow line-clamp-1">${item.description}</p>
                     </div>
                     <div class="flex items-center gap-1 bg-black/40 px-1.5 py-0.5 rounded border border-white/20 text-xs">
-                        <span>⭐ ${item.stars}</span>
+                        <span>⭐ ${item.stars || 0}</span>
                     </div>
                 </div>
 
@@ -85,4 +85,72 @@ function filterCards() {
 function copyCode(code) {
     navigator.clipboard.writeText(code);
     alert('Copied Workshop ID: ' + code);
+}
+
+// Modal Toggle Functions
+function openCreateModal() {
+    document.getElementById('createModal').classList.remove('hidden');
+}
+
+function closeCreateModal() {
+    document.getElementById('createModal').classList.add('hidden');
+}
+
+// Form Submission Handler
+function handleCreateSubmit(event) {
+    event.preventDefault();
+
+    const newItem = {
+        id: document.getElementById('newId').value,
+        category: document.getElementById('newCategory').value,
+        title: document.getElementById('newTitle').value,
+        description: document.getElementById('newDescription').value,
+        author: document.getElementById('newAuthor').value,
+        stars: "0",
+        image: "https://via.placeholder.com/600x400/1e1e1e/ffffff?text=New+Creation"
+    };
+
+    // Add item to local memory and re-render grid
+    workshopData.unshift(newItem);
+    renderCards();
+    closeCreateModal();
+
+    // Reset form fields
+    event.target.reset();
+}
+
+// Draggable Window Handler
+function makeDraggable(elmnt, dragHeader) {
+    let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+    
+    if (dragHeader) {
+        dragHeader.onmousedown = dragMouseDown;
+    } else {
+        elmnt.onmousedown = dragMouseDown;
+    }
+
+    function dragMouseDown(e) {
+        e = e || window.event;
+        e.preventDefault();
+        pos3 = e.clientX;
+        pos4 = e.clientY;
+        document.onmouseup = closeDragElement;
+        document.onmousemove = elementDrag;
+    }
+
+    function elementDrag(e) {
+        e = e || window.event;
+        e.preventDefault();
+        pos1 = pos3 - e.clientX;
+        pos2 = pos4 - e.clientY;
+        pos3 = e.clientX;
+        pos4 = e.clientY;
+        elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
+        elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
+    }
+
+    function closeDragElement() {
+        document.onmouseup = null;
+        document.onmousemove = null;
+    }
 }
