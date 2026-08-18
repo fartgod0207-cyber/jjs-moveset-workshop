@@ -10,18 +10,16 @@ document.addEventListener('DOMContentLoaded', async () => {
         console.error('Failed to load workshop data:', error);
     }
 
-    // Initialize Left-Click Dragging for Main Window
+    // Make the ENTIRE main window draggable by passing mainWindow as both targets
     const mainWindow = document.getElementById('mainWindow');
-    const mainHeader = document.getElementById('mainHeader');
-    if (mainWindow && mainHeader) {
-        makeDraggable(mainWindow, mainHeader);
+    if (mainWindow) {
+        makeDraggable(mainWindow, mainWindow);
     }
 
-    // Initialize Left-Click Dragging for Modal
+    // Make the ENTIRE modal window draggable
     const modalWindow = document.getElementById('modalWindow');
-    const modalHeader = document.getElementById('modalHeader');
-    if (modalWindow && modalHeader) {
-        makeDraggable(modalWindow, modalHeader);
+    if (modalWindow) {
+        makeDraggable(modalWindow, modalWindow);
     }
 });
 
@@ -134,18 +132,18 @@ function handleCreateSubmit(event) {
     event.target.reset();
 }
 
-// Left Mouse Button Dragging Handler
-function makeDraggable(elmnt, dragHeader) {
+// Allows dragging from ANYWHERE on the window (except interactive elements)
+function makeDraggable(elmnt, dragArea) {
     let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
     
-    dragHeader.onmousedown = dragMouseDown;
+    dragArea.onmousedown = dragMouseDown;
 
     function dragMouseDown(e) {
-        // Strict check: Only drag on Left Mouse Click (button === 0)
+        // Only trigger on Left Mouse Click (button === 0)
         if (e.button !== 0) return;
 
-        // Ignore drag trigger if clicking on interactive elements inside header
-        if (['INPUT', 'BUTTON', 'A', 'SELECT', 'TEXTAREA'].includes(e.target.tagName)) {
+        // Prevent dragging when clicking buttons, inputs, dropdowns, or textareas
+        if (['INPUT', 'BUTTON', 'A', 'SELECT', 'TEXTAREA'].includes(e.target.tagName) || e.target.closest('button')) {
             return;
         }
 
