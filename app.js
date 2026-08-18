@@ -20,8 +20,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 function switchTab(tabName) {
     currentTab = tabName;
     
-    const tabs = ['Movesets', 'Maps', 'SkillBuilder', 'Favourites'];
-    tabs.forEach(t => {
+    ['Movesets', 'Maps', 'Favourites'].forEach(t => {
         let btn = document.getElementById('tab-' + t);
         if (btn) {
             if (t === tabName) {
@@ -34,15 +33,7 @@ function switchTab(tabName) {
         }
     });
 
-    let grid = document.getElementById('cardGrid');
-    if (!grid) return;
-
-    if (tabName === 'SkillBuilder') {
-        renderSkillBuilderUI();
-    } else {
-        grid.className = "p-3 bg-[#b8b8b8] grid grid-cols-1 md:grid-cols-2 gap-3 min-h-[300px]";
-        renderCards();
-    }
+    renderCards();
 }
 
 function renderCards() {
@@ -98,72 +89,8 @@ function renderCards() {
     });
 }
 
-function renderSkillBuilderUI() {
-    let grid = document.getElementById('cardGrid');
-    if (!grid) return;
-
-    grid.className = "p-3 bg-[#b8b8b8]";
-    
-    grid.innerHTML = `
-        <div class="bg-[#c2c2c2] border-2 border-[#555555] rounded p-3 text-zinc-900">
-            <div class="flex border-b-2 border-[#555555] bg-[#a0a0a0] text-xs font-bold mb-3">
-                <button class="px-4 py-1.5 bg-[#c2c2c2] border-r-2 border-[#555555]">Timeline</button>
-                <button class="px-4 py-1.5 hover:bg-[#b0b0b0] border-r-2 border-[#555555]">Conditions</button>
-                <button class="px-4 py-1.5 hover:bg-[#b0b0b0]">Properties</button>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div class="flex flex-col gap-2">
-                    <div class="bg-[#d4d4d4] border-2 border-[#555555] rounded p-2 flex flex-col gap-1.5">
-                        <button onclick="addTimelineBlock('Cancel')" class="bg-white hover:bg-zinc-100 border-2 border-[#555555] p-1 rounded text-center text-xs font-bold">Cancel</button>
-                        <button onclick="addTimelineBlock('Lapse Blue')" class="bg-[#93c5fd] hover:bg-[#7dd3fc] border-2 border-[#555555] p-1 rounded text-center text-xs font-bold">Lapse Blue</button>
-                        <button onclick="addTimelineBlock('Reversal Red')" class="bg-[#93c5fd] hover:bg-[#7dd3fc] border-2 border-[#555555] p-1 rounded text-center text-xs font-bold">Reversal Red</button>
-                        <button onclick="addTimelineBlock('Rapid punches')" class="bg-[#93c5fd] hover:bg-[#7dd3fc] border-2 border-[#555555] p-1 rounded text-center text-xs font-bold">Rapid punches</button>
-                        <button onclick="addTimelineBlock('Twofold Kick')" class="bg-[#93c5fd] hover:bg-[#7dd3fc] border-2 border-[#555555] p-1 rounded text-center text-xs font-bold">Twofold Kick</button>
-                    </div>
-
-                    <div class="bg-[#d4d4d4] border-2 border-[#555555] rounded p-2 flex justify-between items-center text-xs font-bold">
-                        <span>CANCEL LAST</span>
-                        <input type="checkbox" checked class="w-5 h-5 accent-red-600">
-                    </div>
-                    <div class="bg-[#d4d4d4] border-2 border-[#555555] rounded p-2 flex justify-between items-center text-xs font-bold">
-                        <span>ENABLE VARIANTS</span>
-                        <input type="checkbox" checked class="w-5 h-5 accent-emerald-500">
-                    </div>
-                </div>
-
-                <div class="flex flex-col justify-between bg-[#d4d4d4] border-2 border-[#555555] rounded p-2 min-h-[220px]">
-                    <div id="timelineStack" class="flex flex-col gap-1.5">
-                        <div class="bg-[#ffedd5] border-2 border-[#555555] p-1.5 rounded flex justify-between items-center text-xs font-bold text-orange-950">
-                            <span>⚔️ [Incantation] SPECIAL</span>
-                            <button onclick="this.parentElement.remove()" class="text-red-600 text-xs font-black">✕</button>
-                        </div>
-                        <div class="bg-[#fecaca] border-2 border-cyan-400 p-1.5 rounded flex justify-between items-center text-xs font-bold text-red-950">
-                            <span>⚔️ [Strong Dismantle] SKILL</span>
-                            <button onclick="this.parentElement.remove()" class="text-red-600 text-xs font-black">✕</button>
-                        </div>
-                    </div>
-
-                    <div class="flex justify-end gap-1 mt-3 text-xs">
-                        <button onclick="document.getElementById('timelineStack').innerHTML=''" class="bg-red-500 text-white border-2 border-[#555555] px-2 py-0.5 rounded font-bold hover:bg-red-600">- CLEAR</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    `;
-}
-
-function addTimelineBlock(name) {
-    let stack = document.getElementById('timelineStack');
-    if (!stack) return;
-    let div = document.createElement('div');
-    div.className = "bg-[#bfdbfe] border-2 border-[#555555] p-1.5 rounded flex justify-between items-center text-xs font-bold text-blue-950";
-    div.innerHTML = `<span>⚔️ [${name}] SKILL</span><button onclick="this.parentElement.remove()" class="text-red-600 text-xs font-black">✕</button>`;
-    stack.appendChild(div);
-}
-
 function filterCards() {
-    if (currentTab !== 'SkillBuilder') renderCards();
+    renderCards();
 }
 
 function copyCode(code) {
@@ -194,7 +121,9 @@ function handleCreateSubmit(event) {
     };
 
     workshopData.unshift(newItem);
-    if (currentTab !== 'SkillBuilder') renderCards();
+    
+    // Switch to the tab where the item was created and render
+    switchTab(newItem.category);
     closeCreateModal();
     event.target.reset();
 }
