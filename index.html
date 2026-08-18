@@ -11,11 +11,11 @@
 </head>
 <body class="min-h-screen flex items-center justify-center p-4 bg-cover bg-center bg-no-repeat bg-fixed select-none" style="background-image: url('cat.png');">
 
-    <!-- Main In-Game Window Container (Made Draggable) -->
+    <!-- Entire Window Container Made Draggable -->
     <div id="mainWindow" class="w-full max-w-4xl bg-[#c2c2c2] border-4 border-[#555555] shadow-2xl overflow-hidden text-zinc-900 font-['Finger_Paint'] absolute cursor-grab active:cursor-grabbing">
         
         <!-- Top Navigation Bar -->
-        <div id="mainHeader" class="flex border-b-2 border-[#555555] bg-[#b0b0b0] text-sm select-none">
+        <div class="flex border-b-2 border-[#555555] bg-[#b0b0b0] text-sm select-none">
             <button onclick="switchTab('Movesets')" id="tab-Movesets" class="flex-1 py-2 text-center font-bold bg-[#c2c2c2] border-r-2 border-[#555555] transition">Movesets</button>
             <button onclick="switchTab('Maps')" id="tab-Maps" class="flex-1 py-2 text-center font-bold hover:bg-[#b8b8b8] border-r-2 border-[#555555] transition">Maps</button>
             <button onclick="switchTab('Favourites')" id="tab-Favourites" class="flex-1 py-2 text-center font-bold hover:bg-[#b8b8b8] transition">Favourites</button>
@@ -51,7 +51,7 @@
         <div id="modalWindow" class="w-full max-w-md bg-[#c2c2c2] border-4 border-[#555555] shadow-2xl overflow-hidden text-zinc-900 font-['Finger_Paint'] absolute cursor-grab active:cursor-grabbing">
             
             <!-- Draggable Header -->
-            <div id="modalHeader" class="bg-[#a0a0a0] border-b-2 border-[#555555] p-2 flex justify-between items-center select-none">
+            <div class="bg-[#a0a0a0] border-b-2 border-[#555555] p-2 flex justify-between items-center select-none">
                 <span class="font-bold text-sm">CREATE WORKSHOP ITEM</span>
                 <button onclick="closeCreateModal()" class="bg-red-500 text-white px-2 py-0.5 text-xs border border-red-700 font-bold hover:bg-red-600">X</button>
             </div>
