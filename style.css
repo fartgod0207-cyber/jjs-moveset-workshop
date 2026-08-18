@@ -7,11 +7,3 @@ body {
     background-repeat: no-repeat;
     background-attachment: fixed;
 }
-
-input::placeholder {
-    font-family: 'Finger Paint', cursive;
-}
-
-select {
-    font-family: 'Finger Paint', cursive;
-}
